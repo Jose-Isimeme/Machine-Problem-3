@@ -14,6 +14,12 @@
 //Set up timeout feature for server 
 
 //Zombie process handling should be here
+void sigch_hndlr(int h){
+    int sav_errno = errno;
+    while (waitpid(-1, NULL, WNOHANG)>0);
+    errno = sav_errno;
+}
+
 
 
 int main(int argc, char *argv[]) {
@@ -49,6 +55,12 @@ int main(int argc, char *argv[]) {
 	}
     
     //set up socket descriptor(MP1\)
+	
+    ser_addr.sin_port= htons(atoi(argv[2])); // listening port
+    ser_addr.sin_family = AF_INET;   // IPv4 address
+    ser_addr.sin_addr.s_addr = inet_addr(argv[1]);  //helping with figuring IP address 
+
+
 
     
     //BIND (get from mp1)
