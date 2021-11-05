@@ -12,14 +12,14 @@
 
 
 //Set up timeout feature for server 
+int timeout(int )
 
-//Zombie process handling should be here
-void sigch_hndlr(int h){
+//Zombie process h(andling should be here
+void sigch_handler(int h){
     int sav_errno = errno;
     while (waitpid(-1, NULL, WNOHANG)>0);
     errno = sav_errno;
 }
-
 
 
 int main(int argc, char *argv[]) {
@@ -55,16 +55,27 @@ int main(int argc, char *argv[]) {
 	}
     
     //set up socket descriptor(MP1\)
-	
     ser_addr.sin_port= htons(atoi(argv[2])); // listening port
     ser_addr.sin_family = AF_INET;   // IPv4 address
     ser_addr.sin_addr.s_addr = inet_addr(argv[1]);  //helping with figuring IP address 
 
+	if ((socket_1 = socket(AF_INET, SOCK_DGRAM, 0)) <0){ //assign socket descriptor
+		printf("Server: Error, Server not created\n"); 
+		exit(-1);
+	}
+
+    // clean leftover linger bits used previously
+    memset(&ser_addr.sin_zero, '\0', 8);
 
 
-    
-    //BIND (get from mp1)
-
+	//Binding:
+	if (bind(socket_1, (struct sockaddr*)&ser_addr, sizeof(ser_addr)) < 0){
+		printf("Server: Bind Error\n");
+		close(socket_1);
+		exit(-1);
+	}
+	
+	printf("Server: Still Waiting on Connection\n");
     //receiving info from clinets  (MP1 as well)
 
 
