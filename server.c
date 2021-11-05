@@ -113,6 +113,7 @@ int main(int argc, char *argv[]) {
 	char nextchar; //store next character to be placed in the packet
 	nextchar = -1;
 
+	..
 
 
 
